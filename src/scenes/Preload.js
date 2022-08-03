@@ -19,13 +19,14 @@ class Preload extends Phaser.Scene {
     // this.load.image('fireball-2', 'assets/weapons/improved_fireball_002.png');
     // this.load.image('fireball-3', 'assets/weapons/improved_fireball_003.png');
 
-    // this.load.image('diamond', 'assets/collectables/diamond.png');
-    // this.load.image('diamond-1', 'assets/collectables/diamond_big_01.png');
-    // this.load.image('diamond-2', 'assets/collectables/diamond_big_02.png');
-    // this.load.image('diamond-3', 'assets/collectables/diamond_big_03.png');
-    // this.load.image('diamond-4', 'assets/collectables/diamond_big_04.png');
-    // this.load.image('diamond-5', 'assets/collectables/diamond_big_05.png');
-    // this.load.image('diamond-6', 'assets/collectables/diamond_big_06.png');
+    //COLLECTABLE IMAGES - CARROTS
+    this.load.image('carrot-orange', 'assets/collectables/orange.png');
+    this.load.image('carrot-pink', 'assets/collectables/pink.png');
+    this.load.image('carrot-green', 'assets/collectables/green.png');
+    this.load.image('carrot-purple', 'assets/collectables/purple.png');
+    this.load.image('carrot-red', 'assets/collectables/red.png');
+    this.load.image('carrot-yellow', 'assets/collectables/yellow.png');
+    this.load.image('carrot-blue', 'assets/collectables/blue.png');
 
     // this.load.image('bg-spikes-dark', 'assets/bg_spikes_dark.png');
     // this.load.image('sky-play', 'assets/sky_play.png');

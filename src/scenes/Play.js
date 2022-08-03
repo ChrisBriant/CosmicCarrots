@@ -1,8 +1,10 @@
 
 import Phaser from 'phaser';
 import Player from '../entities/Player';
-import Ladders from '../groups/Ladders';
+//import Ladders from '../groups/Ladders';
+import Carrots from '../groups/Carrots';
 import LaddersOverlap from '../entities/Ladders';
+import {levels} from '../data/leveldata';
 
 
 class Play extends Phaser.Scene {
@@ -24,6 +26,7 @@ class Play extends Phaser.Scene {
     const player = this.createPlayer(playerZones.start);
     //const enemies= this.createEnemies(layers.enemySpawns, layers.platformsColliders);
     //const collectables = this.createCollectables(layers.collectables);
+    const carrots = this.createCarrots(layers.carrots);
     //TAKE OUT THE LADDERS OVERLAP SPRITE DETECTION - SOLUTION DOESN'T WORK
     //const laddersOverlap = this.createLadderOverlaps(layers.laddersOverlap);
     const myLaddersOverlap = new LaddersOverlap(this,player,layers.ladders,map);
@@ -41,6 +44,7 @@ class Play extends Phaser.Scene {
       colliders: {
         platformsColliders : layers.platformsColliders,
         ladders : layers.ladders,
+        carrots,
         //projectiles: enemies.getProjectiles(),
         //collectables,
         //traps : layers.traps,
@@ -63,6 +67,12 @@ class Play extends Phaser.Scene {
   //   ladders.addFromLayer(ladderLayer);
   //   return ladders;
   // }
+
+  createCarrots(carrotLayer) {
+    const carrots = new Carrots(this);
+    carrots.addFromLayer(carrotLayer);
+    return carrots;
+  }
 
   createCollectables(collectableLayer) {
     const collectables = new Collectables(this).setDepth(-1);
@@ -93,7 +103,7 @@ class Play extends Phaser.Scene {
     
     const platformsColliders = map.createStaticLayer('platform_colliders', tileset).setAlpha(0);
     const ladders = map.createStaticLayer('ladders', tileset);
-    //const laddersOverlap = map.getObjectLayer('ladders_overlap');
+    const carrots = map.getObjectLayer('carrots');
 
     // const environment = map.createStaticLayer('environment', tileset).setDepth(-2);
     const platforms = map.createStaticLayer('platforms', tileset);
@@ -107,7 +117,7 @@ class Play extends Phaser.Scene {
     ladders.setCollisionByProperty({climbable: true});
 
 
-    return { platforms,playerZones,platformsColliders,ladders };
+    return { platforms,playerZones,platformsColliders,ladders, carrots };
   }
 
   createBG(map) {
@@ -152,7 +162,7 @@ class Play extends Phaser.Scene {
     //this.physics.add.overlap(player, colliders.laddersOverlap.objects[1],this.onClimb);
 
     player.addCollider(colliders.platformsColliders)
-    //.addOverlap(colliders.laddersOverlap, this.onClimb, this);
+    .addOverlap(colliders.carrots, this.onCollectCarrot, this);
 
   }
 
@@ -197,12 +207,21 @@ class Play extends Phaser.Scene {
     player.climb();
   }
 
-  onCollect(entity,collectable) {
+  // onCollect(entity,collectable) {
+  //   //Disable game object - this will deactivate the object (first param) and hide the object (second param)
+  //   this.score += collectable.score;
+  //   this.hud.updateScoreBoard(this.score);
+  //   this.collectSound.play();
+  //   collectable.disableBody(true, true);
+  // }
+
+  onCollectCarrot(entity,collectable) {
     //Disable game object - this will deactivate the object (first param) and hide the object (second param)
-    this.score += collectable.score;
-    this.hud.updateScoreBoard(this.score);
-    this.collectSound.play();
-    collectable.disableBody(true, true);
+    //console.log('COLLECTING', entity, collectable.color, levels.level1.collectSequence[0]);
+    if(collectable.color === levels.level1.collectSequence[0]) {
+      levels.level1.collectSequence.shift();
+    }
+    console.log(levels.level1.collectSequence);
   }
 
   createEnemyColliders(enemies,{colliders}) {
