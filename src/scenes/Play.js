@@ -16,11 +16,14 @@ class Play extends Phaser.Scene {
     this.config = config;
   }
 
-  create({gameStatus}) {
+  create({level}) {
     //this.add.rectangle(0, 0,200,200, 0xFFFFFF,1);
     this.endOfLevel = null;
+    this.level = level;
     this.score = 0;
-    this.hud = new Hud(this,0,0,levels.level1.collectSequence);
+    this.hud = new Hud(this,0,0,levels[`level${this.level}`].collectSequence);
+
+    console.log(`level${this.level}`);
 
     const map = this.createMap();
     //initAnims(this.anims);
@@ -94,7 +97,7 @@ class Play extends Phaser.Scene {
 
   createMap() {
     //const map = this.make.tilemap({key: `level_${this.getCurrentLevel()}`});
-    const map = this.make.tilemap({key: `level_1`});
+    const map = this.make.tilemap({key: `level_${this.level}`});
     map.addTilesetImage('carrot_game_tileset', 'tiles');
     return map;
   }
@@ -222,15 +225,13 @@ class Play extends Phaser.Scene {
 
   onCollectCarrot(entity,collectable) {
     //Disable game object - this will deactivate the object (first param) and hide the object (second param)
-    //console.log('COLLECTING', entity, collectable.color, levels.level1.collectSequence[0]);
-    if(collectable.color === levels.level1.collectSequence[0]) {
+    if(collectable.color === levels[`level${this.level}`].collectSequence[0]) {
       //Remove the carrot
-      levels.level1.collectSequence.shift();
+      levels[`level${this.level}`].collectSequence.shift();
       this.hud.updateScoreBoard(collectable.color);
       collectable.performEvent();
       collectable.setActive(false).setVisible(false);
     }
-    //console.log(levels.level1.collectSequence);
 
   }
 
