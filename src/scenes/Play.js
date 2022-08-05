@@ -1,7 +1,7 @@
 
 import Phaser from 'phaser';
 import Player from '../entities/Player';
-//import Ladders from '../groups/Ladders';
+import Hud from '../hud';
 import Carrots from '../groups/Carrots';
 import LaddersOverlap from '../entities/Ladders';
 import {levels} from '../data/leveldata';
@@ -15,8 +15,9 @@ class Play extends Phaser.Scene {
   }
 
   create({gameStatus}) {
+    //this.add.rectangle(0, 0,200,200, 0xFFFFFF,1);
     this.score = 0;
-    //this.hud = new Hud(this,0,0);
+    this.hud = new Hud(this,0,0,levels.level1.collectSequence);
 
     const map = this.createMap();
     //initAnims(this.anims);
@@ -51,7 +52,7 @@ class Play extends Phaser.Scene {
       }
     });
 
-    //this.createEndOfLevel(playerZones.end, player);
+    this.createEndOfLevel(playerZones.end, player);
 
     this.setupFollowUpCameraOn(player,layers.platforms.height);
 
@@ -177,7 +178,7 @@ class Play extends Phaser.Scene {
     const playerZones = playerZonesLayer.objects;
     return { 
       start: playerZones.find(zone => zone.name === 'startZone'), 
-      //end: playerZones.find(zone => zone.name === 'endZone'), 
+      end: playerZones.find(zone => zone.name === 'endZone'), 
     };
   }
 
@@ -219,9 +220,13 @@ class Play extends Phaser.Scene {
     //Disable game object - this will deactivate the object (first param) and hide the object (second param)
     //console.log('COLLECTING', entity, collectable.color, levels.level1.collectSequence[0]);
     if(collectable.color === levels.level1.collectSequence[0]) {
+      //Remove the carrot
       levels.level1.collectSequence.shift();
+      this.hud.updateScoreBoard(collectable.color);
+      collectable.setActive(false).setVisible(false);
     }
-    console.log(levels.level1.collectSequence);
+    //console.log(levels.level1.collectSequence);
+
   }
 
   createEnemyColliders(enemies,{colliders}) {
@@ -237,21 +242,23 @@ class Play extends Phaser.Scene {
 
   createEndOfLevel(end, player) {
     const endOfLevel = this.physics.add.sprite(end.x, end.y, 'end')
-    .setSize(5, this.config.height).setAlpha(0)
+    .setTexture('door')
+    .setSize(96, 128)
+    .setAlpha(0)
     .setOrigin(0.5,1);
 
-    const eolOverlap = this.physics.add.overlap(player, endOfLevel, () => {
-      eolOverlap.active = false;
+    // const eolOverlap = this.physics.add.overlap(player, endOfLevel, () => {
+    //   eolOverlap.active = false;
 
-      if(this.registry.get('level') === this.config.lastLevel) {
-        this.scene.start('CreditsScene');
-        return;
-      }
+    //   if(this.registry.get('level') === this.config.lastLevel) {
+    //     this.scene.start('CreditsScene');
+    //     return;
+    //   }
 
-      this.registry.inc('level', 1);
-      this.registry.inc('unlocked-levels', 1);
-      this.scene.restart({gameStatus:'LEVEL_COMPLETED'});
-    });
+    //   this.registry.inc('level', 1);
+    //   this.registry.inc('unlocked-levels', 1);
+    //   this.scene.restart({gameStatus:'LEVEL_COMPLETED'});
+    //});
   }
 
   update() {

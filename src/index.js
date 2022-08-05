@@ -7,7 +7,7 @@ import PreloadScene from './scenes/Preload';
 
 const MAP_WIDTH = 1280;
 
-const WIDTH = 600;//document.body.offsetWidth;
+const WIDTH = 1280;//document.body.offsetWidth;
 const HEIGHT = 600;
 const ZOOM_FACTOR = 1;
 

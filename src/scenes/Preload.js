@@ -28,6 +28,8 @@ class Preload extends Phaser.Scene {
     this.load.image('carrot-yellow', 'assets/collectables/yellow.png');
     this.load.image('carrot-blue', 'assets/collectables/blue.png');
 
+    //Door
+    this.load.image('door', 'assets/door.png');
     // this.load.image('bg-spikes-dark', 'assets/bg_spikes_dark.png');
     // this.load.image('sky-play', 'assets/sky_play.png');
     // this.load.image('bg-spikes-tileset', 'assets/bg_spikes_tileset.png');
