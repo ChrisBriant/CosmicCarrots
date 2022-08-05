@@ -1,6 +1,6 @@
 const levels = {
     level1 : {
-        collectSequence : ['red','orange', 'yellow','green','blue', 'pink','purple']
+        collectSequence : ['purple','orange', 'yellow','green','blue', 'pink','red']
     }
 }
 

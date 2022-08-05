@@ -5,6 +5,8 @@ import Hud from '../hud';
 import Carrots from '../groups/Carrots';
 import LaddersOverlap from '../entities/Ladders';
 import {levels} from '../data/leveldata';
+import EventEmitter from '../events/Emitter';
+import {doPurpleEvent} from '../events/events.js'
 
 
 class Play extends Phaser.Scene {
@@ -16,6 +18,7 @@ class Play extends Phaser.Scene {
 
   create({gameStatus}) {
     //this.add.rectangle(0, 0,200,200, 0xFFFFFF,1);
+    this.endOfLevel = null;
     this.score = 0;
     this.hud = new Hud(this,0,0,levels.level1.collectSequence);
 
@@ -58,7 +61,7 @@ class Play extends Phaser.Scene {
 
     //if(gameStatus === 'PLAYER_LOOSE') { return; }
 
-    //this.createGameEvents();
+    this.createGameEvents();
 
   }
 
@@ -149,7 +152,8 @@ class Play extends Phaser.Scene {
   }
 
   createGameEvents() {
-    EventEmitter.on('PLAYER_LOOSE', () => { this.scene.restart({gameStatus:'PLAYER_LOOSE'});});
+    //EventEmitter.on('PLAYER_LOOSE', () => { this.scene.restart({gameStatus:'PLAYER_LOOSE'});});
+    EventEmitter.on('PURPLE_EVENT', () => { doPurpleEvent(this.endOfLevel) })
   }
  
   createPlayer(start) {
@@ -223,6 +227,7 @@ class Play extends Phaser.Scene {
       //Remove the carrot
       levels.level1.collectSequence.shift();
       this.hud.updateScoreBoard(collectable.color);
+      collectable.performEvent();
       collectable.setActive(false).setVisible(false);
     }
     //console.log(levels.level1.collectSequence);
@@ -241,7 +246,7 @@ class Play extends Phaser.Scene {
   }
 
   createEndOfLevel(end, player) {
-    const endOfLevel = this.physics.add.sprite(end.x, end.y, 'end')
+    this.endOfLevel = this.physics.add.sprite(end.x, end.y, 'end')
     .setTexture('door')
     .setSize(96, 128)
     .setAlpha(0)

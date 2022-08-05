@@ -31,7 +31,8 @@ class Carrots extends Phaser.Physics.Arcade.StaticGroup {
         console.log('LAYER', layer);
         layer.objects.forEach(collectableO => {
             const carrotColor = collectableO.properties.filter((e) => e.name === 'color')[0].value;
-            const collectable = this.get(collectableO.x, collectableO.y, carrotColor);
+            const initEvent = collectableO.properties.filter((e) => e.name === 'initEvent')[0].value;
+            const collectable = this.get(collectableO.x, collectableO.y, carrotColor, initEvent);
             //console.log('COLLECTABLE', collectableO);
             //const props = this.mapProperties(collectableO.properties,false);
             //collectable.score = props.score || defaultScore;

@@ -220,8 +220,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":320,
-                 "y":2304
+                 "x":640,
+                 "y":2496
                 }, 
                 {
                  "class":"",
@@ -257,12 +257,17 @@
                          "name":"color",
                          "type":"string",
                          "value":"orange"
+                        }, 
+                        {
+                         "name":"initEvent",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":512,
-                 "y":2304
+                 "x":896,
+                 "y":1664
                 }, 
                 {
                  "class":"",
@@ -275,6 +280,11 @@
                          "name":"color",
                          "type":"string",
                          "value":"red"
+                        }, 
+                        {
+                         "name":"initEvent",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "visible":true,
@@ -293,12 +303,17 @@
                          "name":"color",
                          "type":"string",
                          "value":"purple"
+                        }, 
+                        {
+                         "name":"initEvent",
+                         "type":"bool",
+                         "value":true
                         }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":960,
-                 "y":1024
+                 "x":768,
+                 "y":2496
                 }, 
                 {
                  "class":"",
@@ -311,6 +326,11 @@
                          "name":"color",
                          "type":"string",
                          "value":"green"
+                        }, 
+                        {
+                         "name":"initEvent",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "visible":true,
@@ -329,12 +349,17 @@
                          "name":"color",
                          "type":"string",
                          "value":"yellow"
+                        }, 
+                        {
+                         "name":"initEvent",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":704,
-                 "y":2496
+                 "x":640,
+                 "y":512
                 }, 
                 {
                  "class":"",
@@ -347,6 +372,11 @@
                          "name":"color",
                          "type":"string",
                          "value":"blue"
+                        }, 
+                        {
+                         "name":"initEvent",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "visible":true,
@@ -365,6 +395,11 @@
                          "name":"color",
                          "type":"string",
                          "value":"pink"
+                        }, 
+                        {
+                         "name":"initEvent",
+                         "type":"bool",
+                         "value":false
                         }],
                  "rotation":0,
                  "visible":true,
@@ -373,6 +408,12 @@
                  "y":1920
                 }],
          "opacity":1,
+         "properties":[
+                {
+                 "name":"initEvent",
+                 "type":"bool",
+                 "value":true
+                }],
          "type":"objectgroup",
          "visible":true,
          "x":0,
