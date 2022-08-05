@@ -52,7 +52,8 @@ class Hud extends Phaser.GameObjects.Container {
 
     createScoreBoard() {
         const hudBg = this.scene.add.rectangle(0, this.hudCoords.y,this.containerWidth,this.containerHeight, 0xFFFFFF,1);
-        hudBg.setOrigin(0,0);
+        hudBg.setOrigin(0,0).setAlpha(.5);
+
         //const hudBg = this.scene.add.rectangle(this.hudCoords.x, this.hudCoords.y,this.containerWidth,this.containerHeight, 0xFFFFFF,1);
         // const scoreText = this.scene.add.text(0,0,'0', {fontSize:`${this.fontSize}px`, fill: '#fff'});
         //const scoreImage = this.scene.add.image(0, this.hudCoords.y,'carrot-orange').setOrigin(0);
@@ -73,12 +74,10 @@ class Hud extends Phaser.GameObjects.Container {
         //scoreText.setText(score);
         //Update the scoreboard once
         if(!this.collectedCarrots.includes(carrotColor)) {
-            console.log('carrot index', this.carrotList.indexOf(carrotColor)*64);
             const carrotImgX = this.carrotList.indexOf(carrotColor)*64
             const carrotImage = this.scene.add.image(0, this.hudCoords.y,`carrot-${carrotColor}`).setOrigin(0);
             const carrotContainer =this.scene.add.container(carrotImgX,0,[carrotImage]);
             this.add(carrotContainer);
-            console.log('Carrot List', this.carrotList);
             this.collectedCarrots.push(carrotColor);
         }
 

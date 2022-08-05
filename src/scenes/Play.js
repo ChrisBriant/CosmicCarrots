@@ -38,7 +38,7 @@ class Play extends Phaser.Scene {
     //const laddersOverlap = this.createLadderOverlaps(layers.laddersOverlap);
     const myLaddersOverlap = new LaddersOverlap(this,player,layers.ladders,map);
 
-    //this.createBG(map);
+    this.createBG(map);
     
     // this.createEnemyColliders(enemies, {
     //   colliders: {
@@ -128,18 +128,27 @@ class Play extends Phaser.Scene {
   }
 
   createBG(map) {
-    const bgObject = map.getObjectLayer('distance_bg').objects[0];
+    //const bgImg = this.add.image(0,0,'bg1').setOrigin(0).setDepth(-100);
+    console.log('MAP', map);
 
-    this.spikesImage = this.add.tileSprite(bgObject.x, bgObject.y, this.config.width, bgObject.height,'bg-spikes-dark')
-    .setOrigin(0,1)
-    .setDepth(-10)
-    .setScrollFactor(0,1);
+    for(let x=0; x<map.widthInPixels;x+=320) {
+      for(let y=0; y<map.heightInPixels;y+=640) {
+        //WILL ENABLE LATER DUE TO PERFORMANCE
+        //this.add.image(x,y,'bg1').setOrigin(0).setDepth(-100);
+      }
+    }
+    //const bgObject = map.getObjectLayer('distance_bg').objects[0];
 
-    this.skyImage = this.add.tileSprite(0,0, this.config.width, 180 * 2,'sky-play')
-    .setOrigin(0,0)
-    .setDepth(-12)
-    .setScale(1.1)
-    .setScrollFactor(0,1);
+    // this.spikesImage = this.add.tileSprite(bgObject.x, bgObject.y, this.config.width, bgObject.height,'bg-spikes-dark')
+    // .setOrigin(0,1)
+    // .setDepth(-10)
+    // .setScrollFactor(0,1);
+
+    // this.skyImage = this.add.tileSprite(0,0, this.config.width, 180 * 2,'sky-play')
+    // .setOrigin(0,0)
+    // .setDepth(-12)
+    // .setScale(1.1)
+    // .setScrollFactor(0,1);
   }
 
   createBackButton() {
