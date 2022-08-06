@@ -110,6 +110,7 @@ class Play extends Phaser.Scene {
     
     const platformsColliders = map.createStaticLayer('platform_colliders', tileset).setAlpha(0);
     const ladders = map.createStaticLayer('ladders', tileset);
+    console.log('Here are the ladders', ladders);
     const carrots = map.getObjectLayer('carrots');
 
     // const environment = map.createStaticLayer('environment', tileset).setDepth(-2);
@@ -262,18 +263,16 @@ class Play extends Phaser.Scene {
     .setAlpha(0)
     .setOrigin(0.5,1);
 
-    // const eolOverlap = this.physics.add.overlap(player, endOfLevel, () => {
-    //   eolOverlap.active = false;
+    const eolOverlap = this.physics.add.overlap(player, this.endOfLevel, () => {
+      eolOverlap.active = false;
 
-    //   if(this.registry.get('level') === this.config.lastLevel) {
-    //     this.scene.start('CreditsScene');
-    //     return;
-    //   }
+      // if(this.registry.get('level') === this.config.lastLevel) {
+      //   this.scene.start('CreditsScene');
+      //   return;
+      // }
 
-    //   this.registry.inc('level', 1);
-    //   this.registry.inc('unlocked-levels', 1);
-    //   this.scene.restart({gameStatus:'LEVEL_COMPLETED'});
-    //});
+      this.scene.restart({level:2});
+    });
   }
 
   update() {

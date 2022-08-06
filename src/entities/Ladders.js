@@ -1,10 +1,21 @@
+import EventEmitter from '../events/Emitter';
+
 class Ladders  {
     constructor(scene,player,laddersLayer,map) {
-        scene.physics.add.overlap(player, laddersLayer,this.onClimb,null,this);
+        this.ladderOverlap = scene.physics.add.overlap(player, laddersLayer,this.onClimb,null,this);
         this.ladders = laddersLayer;
         this.tileMap = map;
         this.scene = scene;
         this.ladderTile = null;
+        //Disables the ladders if they are not meant to be shown
+        if(!laddersLayer.layer.visible) {
+            this.ladders.alpha = 0;
+            this.ladderOverlap.active = false;
+        }
+        //Setup the event callback which enables the ladders
+        EventEmitter.on('ORANGE_EVENT',() => {
+            this.showLadders();
+        });
     }
 
     onClimb(player) {
@@ -22,7 +33,12 @@ class Ladders  {
             }
             player.climbing = false;
         }
+    }
 
+    //Call from an event to make the ladders visible and enable them
+    showLadders() {
+        this.ladders.alpha = 1;
+        this.ladderOverlap.active = true;
     }
 }
 

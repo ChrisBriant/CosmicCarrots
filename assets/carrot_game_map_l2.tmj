@@ -99,7 +99,7 @@
          "name":"ladders",
          "opacity":1,
          "type":"tilelayer",
-         "visible":true,
+         "visible":false,
          "width":20,
          "x":0,
          "y":0
@@ -220,8 +220,8 @@
                  "rotation":0,
                  "visible":true,
                  "width":0,
-                 "x":640,
-                 "y":2496
+                 "x":448,
+                 "y":1728
                 }, 
                 {
                  "class":"",
@@ -261,12 +261,12 @@
                         {
                          "name":"initEvent",
                          "type":"bool",
-                         "value":false
+                         "value":true
                         }],
                  "rotation":0,
                  "visible":true,
                  "width":64,
-                 "x":320,
+                 "x":192,
                  "y":1728
                 }, 
                 {

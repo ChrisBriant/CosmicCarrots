@@ -4,7 +4,6 @@ import EventEmitter from '../events/Emitter';
 class Carrot extends Phaser.Physics.Arcade.Sprite {
     constructor(scene,x,y,key,initEvent) {
         super(scene,x,y,key);
-        console.log('KEY', key);
         this.setOrigin(0,1);
         this.setTexture(`carrot-${key}`);
         this.initEvent = initEvent;
@@ -13,37 +12,68 @@ class Carrot extends Phaser.Physics.Arcade.Sprite {
 
     performEvent() {
         if(this.initEvent) {
-            switch (this.color) {
-                case 'red':
-                    console.log('RED EVENT');
-                    break;
-                case 'orange':
-                    console.log('ORANGE EVENT');
-                    break;  
-                case 'yellow':
-                    console.log('YELLOW EVENT');
-                    break;
-                case 'green':
-                    console.log('GREEN EVENT');
-                    break;     
-                case 'blue':
-                    console.log('BLUE EVENT');
-                    break;
-                case 'pink':
-                    console.log('PINK EVENT');
-                    break;
-                case 'purple':
-                    console.log('PURPLE EVENT');
-                    EventEmitter.emit('PURPLE_EVENT');
-                    break;                              
-                default:
-                    break;
+            if(!this.customEvent) {
+                this.performColorEvent();
+            } else {
+                this.performCustomEvent();
             }
-            console.log('This carrot performs an event!');
+
+            
         }  else  {
             console.log('This carrot does nothing.');
         }
     }
+
+    //Standard events determined by the carrot color
+    performColorEvent() {
+        switch (this.color) {
+            case 'red':
+                console.log('RED EVENT');
+                break;
+            case 'orange':
+                console.log('ORANGE EVENT');
+                EventEmitter.emit('ORANGE_EVENT');
+                break;  
+            case 'yellow':
+                console.log('YELLOW EVENT');
+                break;
+            case 'green':
+                console.log('GREEN EVENT');
+                break;     
+            case 'blue':
+                console.log('BLUE EVENT');
+                break;
+            case 'pink':
+                console.log('PINK EVENT');
+                break;
+            case 'purple':
+                console.log('PURPLE EVENT');
+                EventEmitter.emit('PURPLE_EVENT');
+                break;                              
+            default:
+                console.log('This carrot performs an event!');
+                break;
+        }
+    }
+
+    //Custom events where the carrot does something different than standard
+    performCustomEvent() {
+        console.log(this.customEvent);
+        switch (this.customEvent) {
+            case 'TEST_EVENT':
+                console.log('This is a test event');
+                break;
+            default:
+                console.log('There is no custom event.');
+                break;
+        }
+    }
+
+    //SETTERS
+    setCustomEvent(customEvent) {
+        this.customEvent = customEvent;
+    }
+
 }
 
 

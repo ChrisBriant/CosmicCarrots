@@ -17,8 +17,6 @@ const SHARED_CONFIG = {
   width: WIDTH,
   height: HEIGHT,
   zoomFactor: ZOOM_FACTOR,
-  mapWidth: MAP_WIDTH,
-  mapHeight: MAP_HEIGHT,
   debug : true,
   rightTopCorner: {
     x: ((WIDTH / ZOOM_FACTOR) + ((WIDTH - (WIDTH / ZOOM_FACTOR)) / 2)),
