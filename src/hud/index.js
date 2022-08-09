@@ -55,7 +55,7 @@ class Hud extends Phaser.GameObjects.Container {
         hudBg.setOrigin(0,0).setAlpha(.5);
 
         //const hudBg = this.scene.add.rectangle(this.hudCoords.x, this.hudCoords.y,this.containerWidth,this.containerHeight, 0xFFFFFF,1);
-        // const scoreText = this.scene.add.text(0,0,'0', {fontSize:`${this.fontSize}px`, fill: '#fff'});
+        //const scoreText = this.scene.add.text(0,0,'0', {fontSize:`${this.fontSize}px`, fill: '#fff'});
         //const scoreImage = this.scene.add.image(0, this.hudCoords.y,'carrot-orange').setOrigin(0);
         // const scoreImage2 = this.scene.add.image(64, this.hudCoords.y,'carrot-orange').setOrigin(0);
         // const scoreImage3 = this.scene.add.image(128, this.hudCoords.y,'carrot-orange').setOrigin(0);

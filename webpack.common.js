@@ -32,7 +32,15 @@ module.exports = {
         use: {
           loader: 'babel-loader',
         }
-      }
+      },
+      // {
+      //   test: /\.(woff|woff2)$/,
+      //   use: {
+      //     loader: 'file-loader',
+      //   },
+      // },
+
+
     ]
   },
   devServer: {

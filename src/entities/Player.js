@@ -35,6 +35,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     // this.hasBeenHit = false;
     // this.bounceVelocity = 150;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
+    console.log('CURSORS', this.cursors);
     // this.lastDirection = Phaser.Physics.Arcade.FACING_RIGHT;
     // this.projectiles = new Projectiles(this.scene,'iceball-1');
     // this.meleeWeapon = new MeleeWeapon(this.scene,0,0,'sword-default');
@@ -81,6 +82,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     const isSpaceJustDown = Phaser.Input.Keyboard.JustDown(space);
     const isUpJustDown = Phaser.Input.Keyboard.JustDown(up);
     const onFloor = this.body.onFloor();
+
 
     if (left.isDown) {
       this.lastDirection = Phaser.Physics.Arcade.FACING_LEFT;

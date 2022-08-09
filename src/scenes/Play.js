@@ -17,13 +17,12 @@ class Play extends Phaser.Scene {
   }
 
   create({level}) {
-    //this.add.rectangle(0, 0,200,200, 0xFFFFFF,1);
     this.endOfLevel = null;
     this.level = level;
     this.score = 0;
     this.hud = new Hud(this,0,0,levels[`level${this.level}`].collectSequence);
 
-    console.log(`level${this.level}`);
+    this.cursors = this.input.keyboard.createCursorKeys();
 
     const map = this.createMap();
     //initAnims(this.anims);
@@ -64,7 +63,9 @@ class Play extends Phaser.Scene {
 
     //if(gameStatus === 'PLAYER_LOOSE') { return; }
 
-    this.createGameEvents();
+    this.createGameEvents(player,playerZones.start);
+
+    this.createLevelPause();
 
   }
 
@@ -164,9 +165,12 @@ class Play extends Phaser.Scene {
     });
   }
 
-  createGameEvents() {
+  createGameEvents(player,start) {
     //EventEmitter.on('PLAYER_LOOSE', () => { this.scene.restart({gameStatus:'PLAYER_LOOSE'});});
-    EventEmitter.on('PURPLE_EVENT', () => { doPurpleEvent(this.endOfLevel) })
+    EventEmitter.on('PURPLE_EVENT', () => { doPurpleEvent(this.endOfLevel) });
+    //player.body.y = playerZones.start.y-player.body.height -10;
+    console.log(player);
+    EventEmitter.on('UNPAUSE',() => { this.scene.resume(); });
   }
  
   createPlayer(start) {
@@ -271,16 +275,27 @@ class Play extends Phaser.Scene {
       //   return;
       // }
 
-      this.scene.restart({level:2});
+      this.scene.start('LevelIntro', {level:2});
+      this.scene.stop();
+      //this.scene.restart({level:2});
     });
   }
 
   update() {
+    // const {down} = this.cursors;
+    // if(down.isDown) {
+    //   console.log('Un pause');
+    //   EventEmitter.emit('UNPAUSE');
+    // }
     // this.spikesImage.tilePositionX = this.cameras.main.scrollX * 0.3
     // this.skyImage.tilePositionX = this.cameras.main.scrollX * 0.1;
   }
 
-
+  //TODO: PAUSE THE LEVEL WHEN IT STARTS DISPLAY INSTRUCTION TEXT AND UNPASUE WHEN KEY IS PRESSED
+  createLevelPause() {
+    //this.physics.pause();
+    this.scene.pause();
+  }
 
 }
 

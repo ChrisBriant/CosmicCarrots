@@ -55,7 +55,8 @@ class Preload extends Phaser.Scene {
   }
 
   startGame() {
-    this.scene.start('PlayScene',{level:1});
+    this.scene.start('LevelIntro',{level:1});
+    //this.scene.start('PlayScene',{level:1});
   }
 
 }
