@@ -9,8 +9,6 @@ class Hud extends Phaser.GameObjects.Container {
         //const { rightTopCorner } = scene.config;
         this.containerWidth = 448;
         this.containerHeight = 64;
-        console.log(((scene.config.width / 2) - (this.containerWidth / 2)) - (this.containerWidth/2),scene.config.width);
-        console.log(((scene.config.width / 2) - (this.containerWidth / 2)),scene.config.width);
         this.hudCoords = {x: (scene.config.width / 2) - (this.containerWidth/2), y: 10};
         this.setPosition(this.hudCoords.x, this.hudCoords.y);
         this.carrotList = [...carrots];
@@ -46,8 +44,9 @@ class Hud extends Phaser.GameObjects.Container {
 
     setupList() {
         const scoreBoard = this.createScoreBoard();
-
+        const keyDisplay = this.createKeyDisplay();
         this.add(scoreBoard);
+        this.add(keyDisplay);
     }
 
     createScoreBoard() {
@@ -82,6 +81,20 @@ class Hud extends Phaser.GameObjects.Container {
         }
 
         //scoreImage.setX(scoreText.width + 10);
+    }
+
+    createKeyDisplay() {
+        const keyBg = this.scene.add.rectangle(0, this.hudCoords.y,64,this.containerHeight, 0xFFFFFF,1);
+        keyBg.setOrigin(0,0).setAlpha(.5);
+        const keyDisplay = this.scene.add.container(-128,0,[keyBg]);
+        keyDisplay.setName('scoreBoard');
+        return keyDisplay;
+    }
+
+    addKeyToDisplay() {
+        const keyImage = this.scene.add.image(0, this.hudCoords.y,`key`).setOrigin(0);
+        const keyContainer =this.scene.add.container(-128,0,[keyImage]);
+        this.add(keyContainer);  
     }
 }
 

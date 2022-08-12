@@ -2,12 +2,15 @@ import Phaser from "phaser";
 import EventEmitter from '../events/Emitter';
 
 class Carrot extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene,x,y,key,initEvent) {
+    constructor(scene,x,y,key,initEvent,locked) {
         super(scene,x,y,key);
         this.setOrigin(0,1);
         this.setTexture(`carrot-${key}`);
         this.initEvent = initEvent;
         this.color = key;
+        this.locked = locked;
+
+        scene.add.existing(this);
     }
 
     performEvent() {
@@ -72,6 +75,10 @@ class Carrot extends Phaser.Physics.Arcade.Sprite {
     //SETTERS
     setCustomEvent(customEvent) {
         this.customEvent = customEvent;
+    }
+
+    setLocked(locked) {
+        this.locked = locked;
     }
 
 }

@@ -24,8 +24,8 @@ import PreloadScene from './scenes/Preload';
 const MAP_WIDTH = 1280;
 //const MAP_HEIGHT = 2560;
 
-//const WIDTH = 1280;//document.body.offsetWidth;
-const WIDTH = 640;//document.body.offsetWidth;
+const WIDTH = 1280;//document.body.offsetWidth;
+//const WIDTH = 640;//document.body.offsetWidth;
 const HEIGHT = 600;
 const ZOOM_FACTOR = 1;
 

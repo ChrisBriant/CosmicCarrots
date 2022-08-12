@@ -5,4 +5,18 @@ function doPurpleEvent(door) {
     door.setAlpha(1);
 }
 
-export {doPurpleEvent};
+function doCollectKey(hud,player) {
+    if(!player.hasKey) {
+        hud.addKeyToDisplay();
+        player.hasKey = true;
+    }
+}
+
+function doOpenCage(player,collectables) {
+    if(player.hasKey) {
+        console.log('OPEN THE CAGE');
+        collectables.openCage();
+    }
+}
+
+export {doPurpleEvent, doCollectKey, doOpenCage};

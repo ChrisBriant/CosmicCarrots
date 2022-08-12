@@ -13,6 +13,7 @@ import EventEmitter from '../events/Emitter';
 class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y) {
     super(scene, x, y, 'player');
+    this.hasKey = false;
 
     scene.add.existing(this);
     scene.physics.add.existing(this);

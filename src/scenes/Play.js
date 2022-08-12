@@ -3,10 +3,11 @@ import Phaser from 'phaser';
 import Player from '../entities/Player';
 import Hud from '../hud';
 import Carrots from '../groups/Carrots';
+import Collectables from '../groups/Collectables';
 import LaddersOverlap from '../entities/Ladders';
 import {levels} from '../data/leveldata';
 import EventEmitter from '../events/Emitter';
-import {doPurpleEvent} from '../events/events.js'
+import {doPurpleEvent, doCollectKey, doOpenCage} from '../events/events.js'
 
 
 class Play extends Phaser.Scene {
@@ -33,6 +34,7 @@ class Play extends Phaser.Scene {
     //const enemies= this.createEnemies(layers.enemySpawns, layers.platformsColliders);
     //const collectables = this.createCollectables(layers.collectables);
     const carrots = this.createCarrots(layers.carrots);
+    const collectables = this.createCollectables(layers.collectables);
     //TAKE OUT THE LADDERS OVERLAP SPRITE DETECTION - SOLUTION DOESN'T WORK
     //const laddersOverlap = this.createLadderOverlaps(layers.laddersOverlap);
     const myLaddersOverlap = new LaddersOverlap(this,player,layers.ladders,map);
@@ -51,8 +53,7 @@ class Play extends Phaser.Scene {
         platformsColliders : layers.platformsColliders,
         ladders : layers.ladders,
         carrots,
-        //projectiles: enemies.getProjectiles(),
-        //collectables,
+        collectables,
         //traps : layers.traps,
       }
     });
@@ -63,9 +64,9 @@ class Play extends Phaser.Scene {
 
     //if(gameStatus === 'PLAYER_LOOSE') { return; }
 
-    this.createGameEvents(player,playerZones.start);
+    this.createGameEvents(player,playerZones.start,collectables);
 
-    this.createLevelPause();
+    //this.createLevelPause();
 
   }
 
@@ -84,9 +85,9 @@ class Play extends Phaser.Scene {
 
   createCollectables(collectableLayer) {
     const collectables = new Collectables(this).setDepth(-1);
-
+    console.log('HERE IS THE COLLECTABLE LAYER', collectableLayer, collectables);
     collectables.addFromLayer(collectableLayer);
-    collectables.playAnimation('diamond-shine');
+    //collectables.playAnimation('diamond-shine');
 
     return collectables;
   }
@@ -111,12 +112,10 @@ class Play extends Phaser.Scene {
     
     const platformsColliders = map.createStaticLayer('platform_colliders', tileset).setAlpha(0);
     const ladders = map.createStaticLayer('ladders', tileset);
-    console.log('Here are the ladders', ladders);
     const carrots = map.getObjectLayer('carrots');
-
+    const collectables = map.getObjectLayer('collectables');
     // const environment = map.createStaticLayer('environment', tileset).setDepth(-2);
     const platforms = map.createStaticLayer('platforms', tileset);
-    console.log('PLATFORMS', platforms);
     const playerZones = map.getObjectLayer('player_zones');
     // const enemySpawns = map.getObjectLayer('enemy_spawns');
     // const collectables = map.getObjectLayer('collectables');
@@ -126,7 +125,7 @@ class Play extends Phaser.Scene {
     ladders.setCollisionByProperty({climbable: true});
 
 
-    return { platforms,playerZones,platformsColliders,ladders, carrots };
+    return { platforms,playerZones,platformsColliders,ladders, carrots, collectables };
   }
 
   createBG(map) {
@@ -165,11 +164,12 @@ class Play extends Phaser.Scene {
     });
   }
 
-  createGameEvents(player,start) {
+  createGameEvents(player,start,collectables) {
     //EventEmitter.on('PLAYER_LOOSE', () => { this.scene.restart({gameStatus:'PLAYER_LOOSE'});});
     EventEmitter.on('PURPLE_EVENT', () => { doPurpleEvent(this.endOfLevel) });
+    EventEmitter.on('COLLECT_KEY', () => { doCollectKey(this.hud, player)});
+    EventEmitter.on('OPEN_CAGE', () => { doOpenCage(player,collectables)});
     //player.body.y = playerZones.start.y-player.body.height -10;
-    console.log(player);
     EventEmitter.on('UNPAUSE',() => { this.scene.resume(); });
   }
  
@@ -184,7 +184,8 @@ class Play extends Phaser.Scene {
     //this.physics.add.overlap(player, colliders.laddersOverlap.objects[1],this.onClimb);
 
     player.addCollider(colliders.platformsColliders)
-    .addOverlap(colliders.carrots, this.onCollectCarrot, this);
+    .addOverlap(colliders.carrots, this.onCollectCarrot, this)
+    .addOverlap(colliders.collectables, this.onCollect, this);
 
   }
 
@@ -229,17 +230,15 @@ class Play extends Phaser.Scene {
     player.climb();
   }
 
-  // onCollect(entity,collectable) {
-  //   //Disable game object - this will deactivate the object (first param) and hide the object (second param)
-  //   this.score += collectable.score;
-  //   this.hud.updateScoreBoard(this.score);
-  //   this.collectSound.play();
-  //   collectable.disableBody(true, true);
-  // }
+  onCollect(entity,collectable) {
+    //Disable game object - this will deactivate the object (first param) and hide the object (second param)
+    collectable.performEvent();
+  }
 
   onCollectCarrot(entity,collectable) {
     //Disable game object - this will deactivate the object (first param) and hide the object (second param)
-    if(collectable.color === levels[`level${this.level}`].collectSequence[0]) {
+    console.log('Collecting', collectable.locked, collectable.color);
+    if(collectable.color === levels[`level${this.level}`].collectSequence[0] && !collectable.locked) {
       //Remove the carrot
       levels[`level${this.level}`].collectSequence.shift();
       this.hud.updateScoreBoard(collectable.color);
