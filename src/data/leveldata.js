@@ -11,8 +11,13 @@ const levels = {
     },
     level3 : {
         title: 'Level 3',
-        instruction: 'Colelct the yellow carrot to reveal the key',
+        instruction: 'Collect the yellow carrot to reveal the key',
         collectSequence : ['yellow','green', 'orange','red','blue', 'pink','purple']
+    },
+    level4 : {
+        title: 'Level 4',
+        instruction: 'Aliens Attack! Collecting the green carrot will cause aliens to invate. Avoid them at all costs, contact with an alien will restart the level again.',
+        collectSequence : ['green','yellow', 'orange','red','blue', 'pink','purple']
     }
 }
 

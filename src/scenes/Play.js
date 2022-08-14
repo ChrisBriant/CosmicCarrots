@@ -5,6 +5,8 @@ import Hud from '../hud';
 import Carrots from '../groups/Carrots';
 import Collectables from '../groups/Collectables';
 import LaddersOverlap from '../entities/Ladders';
+import Enemy from '../entities/Enemy';
+import Enemies from '../groups/Enemies';
 import {levels} from '../data/leveldata';
 import EventEmitter from '../events/Emitter';
 import {doPurpleEvent, doCollectKey, doOpenCage} from '../events/events.js'
@@ -41,12 +43,19 @@ class Play extends Phaser.Scene {
 
     this.createBG(map);
     
-    // this.createEnemyColliders(enemies, {
-    //   colliders: {
-    //     platformsColliders : layers.platformsColliders,
-    //     player
-    //   }
-    // });
+    console.log('Enemy Colliders');
+    if(layers.enemySpawns) {
+      console.log('I will create enemy colliders');
+      const enemies= this.createEnemies(layers.enemySpawns, layers.platformsColliders);
+      this.createEnemyColliders(enemies, {
+          colliders: {
+            platformsColliders : layers.platformsColliders,
+            enemyColliders : layers.enemyColliders,
+            player
+          }
+      });
+    }
+
 
     this.createPlayerColliders(player, {
       colliders: {
@@ -54,6 +63,7 @@ class Play extends Phaser.Scene {
         ladders : layers.ladders,
         carrots,
         collectables,
+        enemyColliders : layers.enemyColliders,
         //traps : layers.traps,
       }
     });
@@ -84,12 +94,15 @@ class Play extends Phaser.Scene {
   }
 
   createCollectables(collectableLayer) {
-    const collectables = new Collectables(this).setDepth(-1);
-    console.log('HERE IS THE COLLECTABLE LAYER', collectableLayer, collectables);
-    collectables.addFromLayer(collectableLayer);
+    if(collectableLayer) {
+      const collectables = new Collectables(this).setDepth(-1);
+      console.log('HERE IS THE COLLECTABLE LAYER', collectableLayer, collectables);
+      collectables.addFromLayer(collectableLayer);
+      return collectables;
+    }
     //collectables.playAnimation('diamond-shine');
-
-    return collectables;
+    return null;
+    
   }
 
   playBgMusic() {
@@ -114,18 +127,25 @@ class Play extends Phaser.Scene {
     const ladders = map.createStaticLayer('ladders', tileset);
     const carrots = map.getObjectLayer('carrots');
     const collectables = map.getObjectLayer('collectables');
+    console.log('Here are the collectables', collectables);
     // const environment = map.createStaticLayer('environment', tileset).setDepth(-2);
     const platforms = map.createStaticLayer('platforms', tileset);
     const playerZones = map.getObjectLayer('player_zones');
+    const enemyColliders = map.createStaticLayer('enemy_colliders');
+    const enemySpawns = map.getObjectLayer('enemies')
     // const enemySpawns = map.getObjectLayer('enemy_spawns');
     // const collectables = map.getObjectLayer('collectables');
     // const traps = map.createStaticLayer('traps',tileset);
 
     platformsColliders.setCollisionByProperty({collides: true});
+    if(enemyColliders) {
+      //Set the collider if there is an enemies layer
+      enemyColliders.setCollisionByProperty({collides: true});
+    }
     ladders.setCollisionByProperty({climbable: true});
 
 
-    return { platforms,playerZones,platformsColliders,ladders, carrots, collectables };
+    return { platforms,playerZones,platformsColliders,ladders, carrots, collectables, enemyColliders, enemySpawns };
   }
 
   createBG(map) {
@@ -168,7 +188,7 @@ class Play extends Phaser.Scene {
     //EventEmitter.on('PLAYER_LOOSE', () => { this.scene.restart({gameStatus:'PLAYER_LOOSE'});});
     EventEmitter.on('PURPLE_EVENT', () => { doPurpleEvent(this.endOfLevel) });
     EventEmitter.on('COLLECT_KEY', () => { doCollectKey(this.hud, player)});
-    EventEmitter.on('OPEN_CAGE', () => { doOpenCage(player,collectables)});
+    EventEmitter.on('OPEN_CAGE', () => { doOpenCage(player,collectables,this)});
     //player.body.y = playerZones.start.y-player.body.height -10;
     EventEmitter.on('UNPAUSE',() => { this.scene.resume(); });
   }
@@ -204,14 +224,13 @@ class Play extends Phaser.Scene {
     };
   }
 
-  createEnemies(spawnLayer, platformsColliders) {
+  createEnemies(spawnLayer, platformsColliders, enemyColliders) {
     const enemies = new Enemies(this);
-    const enemyTypes = enemies.getTypes();
 
     spawnLayer.objects.forEach((spawnPoint,i) => {
-      const type = spawnPoint.properties.filter(prop => prop.name === 'type')[0].value;
-      const enemy = new enemyTypes[type](this,spawnPoint.x, spawnPoint.y);
-      enemy.setPlatformColliders(platformsColliders)
+      const enemy = new Enemy(this,spawnPoint.x, spawnPoint.y);
+      enemy.setPlatformColliders(platformsColliders);
+      enemy.setEnemyColliders(enemyColliders);
       enemies.add(enemy);
     });
     
@@ -220,6 +239,10 @@ class Play extends Phaser.Scene {
 
   onPlayerCollision(enemy, player) {
     player.takesHit(enemy);
+  }
+
+  onEnemyCollision(enemy) {
+    enemy.reverse();
   }
 
   onHit(entity,source) {
@@ -250,9 +273,8 @@ class Play extends Phaser.Scene {
 
   createEnemyColliders(enemies,{colliders}) {
       enemies.addCollider(colliders.platformsColliders)
-      .addCollider(colliders.player, this.onPlayerCollision)
-      .addCollider(colliders.player.projectiles, this.onHit)
-      .addOverlap(colliders.player.meleeWeapon, this.onHit);
+      .addCollider(colliders.enemyColliders, this.onEnemyCollision)
+      .addCollider(colliders.player, this.onPlayerCollision);
   }
 
   getCurrentLevel() {

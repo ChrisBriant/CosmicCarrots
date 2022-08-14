@@ -12,10 +12,10 @@ function doCollectKey(hud,player) {
     }
 }
 
-function doOpenCage(player,collectables) {
+function doOpenCage(player,collectables,scene) {
     if(player.hasKey) {
         console.log('OPEN THE CAGE');
-        collectables.openCage();
+        collectables.openCage(scene);
     }
 }
 

@@ -193,26 +193,27 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   takesHit(source) {
-    if(this.hasBeenHit) {return;}
+    console.log('The player has been hit');
+    // if(this.hasBeenHit) {return;}
 
-    this.health -= source.damage || source.properties.damage || 0;
-    if(this.health <= 0) {
-      EventEmitter.emit('PLAYER_LOOSE');
-      return;
-    }
+    // this.health -= source.damage || source.properties.damage || 0;
+    // if(this.health <= 0) {
+    //   EventEmitter.emit('PLAYER_LOOSE');
+    //   return;
+    // }
 
-    this.hasBeenHit = true;
-    this.bounceOff(source);
-    const hitAnim = this.playDamageTween();
-    this.hp.decrease(this.health);
+    // this.hasBeenHit = true;
+    // this.bounceOff(source);
+    // const hitAnim = this.playDamageTween();
+    // this.hp.decrease(this.health);
 
-    source.deliversHit && source.deliversHit(this);
+    // source.deliversHit && source.deliversHit(this);
 
-    this.scene.time.delayedCall(1000, () => {
-      this.hasBeenHit =false;
-      hitAnim.stop();
-      this.clearTint();
-    });
+    // this.scene.time.delayedCall(1000, () => {
+    //   this.hasBeenHit =false;
+    //   hitAnim.stop();
+    //   this.clearTint();
+    // });
   }
 
   //Stops the player from jumping at the top of the ladder

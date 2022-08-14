@@ -29,17 +29,21 @@ class Collectables extends Phaser.Physics.Arcade.StaticGroup {
     addFromLayer(layer) {
         //const {score:defaultScore, type} = this.mapProperties(layer.objects,true);
         layer.objects.forEach(collectableO => {
-            console.log('COLLECTABLES',collectableO.properties.filter(e => e.name==='event')[0].value);
+            console.log('COLLECTABLES',collectableO.properties.filter(e => e.name==='event')[0].value, collectableO.properties.filter(e => e.name==='visible')[0].value);
             const collectable = this.get(collectableO.x, collectableO.y,collectableO.name);
             collectable.event = collectableO.properties.filter(e => e.name==='event')[0].value;
+            collectable.visible = collectableO.properties.filter(e => e.name==='visible')[0].value;
+            if(!collectable.visible) {
+                collectable.setAlpha(0);
+            }
         });
     }
 
     //Collectable events
-    openCage() {
+    openCage(scene) {
         //Get the cage
         const cage = this.getChildren().filter(obj => obj.name === 'cage')[0];
-        cage.openCage();
+        cage.openCage(scene);
     }
 }
 

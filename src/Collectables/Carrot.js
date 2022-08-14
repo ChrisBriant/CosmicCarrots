@@ -9,7 +9,7 @@ class Carrot extends Phaser.Physics.Arcade.Sprite {
         this.initEvent = initEvent;
         this.color = key;
         this.locked = locked;
-
+        EventEmitter.on('UNLOCK_CARROT',() => { this.locked = false;});
         scene.add.existing(this);
     }
 
@@ -39,6 +39,8 @@ class Carrot extends Phaser.Physics.Arcade.Sprite {
                 break;  
             case 'yellow':
                 console.log('YELLOW EVENT');
+                //DISPLAY THE KEY
+                EventEmitter.emit('YELLOW_EVENT');
                 break;
             case 'green':
                 console.log('GREEN EVENT');
@@ -73,13 +75,13 @@ class Carrot extends Phaser.Physics.Arcade.Sprite {
     }
 
     //SETTERS
-    setCustomEvent(customEvent) {
-        this.customEvent = customEvent;
-    }
+    // setCustomEvent(customEvent) {
+    //     this.customEvent = customEvent;
+    // }
 
-    setLocked(locked) {
-        this.locked = locked;
-    }
+    // setLocked(locked) {
+    //     this.locked = locked;
+    // }
 
 }
 
