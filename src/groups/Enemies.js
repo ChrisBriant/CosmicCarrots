@@ -8,6 +8,12 @@ class Enemies extends Phaser.GameObjects.Group {
         Object.assign(this, collidable);
     }
 
+    //Make the enemies visible
+    setVisible() {
+        console.log('Enabling Enemies',this);
+        this.getChildren().forEach((enemy) => { enemy.visible = true; })
+    }
+
     // getProjectiles() {
     //     const projectiles = new Phaser.GameObjects.Group();
     //     this.getChildren().forEach(enemy => {

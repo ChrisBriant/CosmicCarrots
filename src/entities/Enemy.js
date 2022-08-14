@@ -27,13 +27,14 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
   init() {
     this.gravity = 500;
     this.speed = 75;
+    this.visible = false;
     // this.timeFromLastTurn = 0;
     // this.health = 20;
     // this.maxPatrolDistance = 100;
     // this.currentPatrolDistance = 0;
-    this.rayGraphics = this.scene.add.graphics({lineStyle: {width:2, color:0xaa00aa}});
+    //this.rayGraphics = this.scene.add.graphics({lineStyle: {width:2, color:0xaa00aa}});
 
-    this.damage =  20;
+    //this.damage =  20;
 
     // this.setImmovable(true);
     this.setOrigin(0.5,1);
@@ -48,8 +49,9 @@ class Enemy extends Phaser.Physics.Arcade.Sprite {
 
   update(time) {
 
-    this.play('alien-walk', true);
- 
+    if(this.visible) {
+      this.play('alien-walk', true);
+    }
     // if(this.getBounds().bottom > 600) {
     //     this.scene.events.removeListener(Phaser.Scenes.Events.UPDATE, this.update, this);
     //     this.setActive(false);

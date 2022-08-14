@@ -43,10 +43,12 @@ class Play extends Phaser.Scene {
 
     this.createBG(map);
     
+    let enemies = null;
+
     console.log('Enemy Colliders');
     if(layers.enemySpawns) {
       console.log('I will create enemy colliders');
-      const enemies= this.createEnemies(layers.enemySpawns, layers.platformsColliders);
+      enemies= this.createEnemies(layers.enemySpawns, layers.platformsColliders);
       this.createEnemyColliders(enemies, {
           colliders: {
             platformsColliders : layers.platformsColliders,
@@ -74,7 +76,7 @@ class Play extends Phaser.Scene {
 
     //if(gameStatus === 'PLAYER_LOOSE') { return; }
 
-    this.createGameEvents(player,playerZones.start,collectables);
+    this.createGameEvents(player,playerZones.start,collectables,enemies);
 
     //this.createLevelPause();
 
@@ -184,9 +186,10 @@ class Play extends Phaser.Scene {
     });
   }
 
-  createGameEvents(player,start,collectables) {
+  createGameEvents(player,start,collectables,enemies) {
     //EventEmitter.on('PLAYER_LOOSE', () => { this.scene.restart({gameStatus:'PLAYER_LOOSE'});});
     EventEmitter.on('PURPLE_EVENT', () => { doPurpleEvent(this.endOfLevel) });
+    EventEmitter.on('GREEN_EVENT', () => { this.enableEnemies(player,enemies) });
     EventEmitter.on('COLLECT_KEY', () => { doCollectKey(this.hud, player)});
     EventEmitter.on('OPEN_CAGE', () => { doOpenCage(player,collectables,this)});
     //player.body.y = playerZones.start.y-player.body.height -10;
@@ -260,7 +263,6 @@ class Play extends Phaser.Scene {
 
   onCollectCarrot(entity,collectable) {
     //Disable game object - this will deactivate the object (first param) and hide the object (second param)
-    console.log('Collecting', collectable.locked, collectable.color);
     if(collectable.color === levels[`level${this.level}`].collectSequence[0] && !collectable.locked) {
       //Remove the carrot
       levels[`level${this.level}`].collectSequence.shift();
@@ -274,7 +276,12 @@ class Play extends Phaser.Scene {
   createEnemyColliders(enemies,{colliders}) {
       enemies.addCollider(colliders.platformsColliders)
       .addCollider(colliders.enemyColliders, this.onEnemyCollision)
-      .addCollider(colliders.player, this.onPlayerCollision);
+      //.addCollider(colliders.player, this.onPlayerCollision);
+  }
+
+  enableEnemies(player,enemies) {
+    enemies.addCollider(player, this.onPlayerCollision);
+    enemies.setVisible();
   }
 
   getCurrentLevel() {
