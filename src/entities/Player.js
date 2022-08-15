@@ -87,7 +87,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     if(this.playerKilled) {return;}
     //console.log('playerpos',this.body.y, this.mapHeight);
     //The player has "died" fallen off the screen so we restart the level
-    if(this.body.y > this.mapHeight) {
+    if(this.y > this.mapHeight) {
       this.playerKilled = true;
       EventEmitter.emit('RESTART_LEVEL');
     }
@@ -219,12 +219,18 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
   takesHit(source) {
     console.log('The player has been hit',this);
+    this.hasBeenHit = true;
     this.scene.physics.world.removeCollider(this.colliders['platforms']);
     const platformCollider = this.scene.physics.world.colliders._active.filter(collider => collider.name === 'platforms')[0];
     const ladderCollider = this.scene.physics.world.colliders._active.filter(collider => collider.name === 'ladders')[0];
-    console.log('Colliders', this.scene.physics.world.colliders._active, platformCollider);
+    const enemyCollider = this.scene.physics.world.colliders._active.filter(collider => collider.name === 'enemies')[0];
+    console.log('Colliders', this.scene.physics.world.colliders._active, enemyCollider);
     this.scene.physics.world.removeCollider(platformCollider);
     this.scene.physics.world.removeCollider(ladderCollider);
+    this.scene.physics.world.removeCollider(enemyCollider);
+    this.setVelocityY(this.playerSpeed);
+    this.play('idle', true);
+    this.setFlipY(true);
     // if(this.hasBeenHit) {return;}
 
     // this.health -= source.damage || source.properties.damage || 0;

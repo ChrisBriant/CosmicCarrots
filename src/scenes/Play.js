@@ -20,11 +20,12 @@ class Play extends Phaser.Scene {
   }
 
   create({level}) {
+    this.level = level;
+    this.carrotSequence = [...levels[`level${this.level}`].collectSequence];
     console.log('LEVELS', levels);
     this.endOfLevel = null;
-    this.level = level;
     this.score = 0;
-    this.hud = new Hud(this,0,0,levels[`level${this.level}`].collectSequence);
+    this.hud = new Hud(this,0,0,this.carrotSequence);
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -265,9 +266,9 @@ class Play extends Phaser.Scene {
 
   onCollectCarrot(entity,collectable) {
     //Disable game object - this will deactivate the object (first param) and hide the object (second param)
-    if(collectable.color === levels[`level${this.level}`].collectSequence[0] && !collectable.locked) {
+    if(collectable.color === this.carrotSequence[0] && !collectable.locked) {
       //Remove the carrot
-      levels[`level${this.level}`].collectSequence.shift();
+      this.carrotSequence.shift();
       this.hud.updateScoreBoard(collectable.color);
       collectable.performEvent();
       collectable.setActive(false).setVisible(false);
@@ -277,12 +278,12 @@ class Play extends Phaser.Scene {
 
   createEnemyColliders(enemies,{colliders}) {
       enemies.addCollider(colliders.platformsColliders)
-      .addCollider(colliders.enemyColliders, this.onEnemyCollision)
+      .addCollider(colliders.enemyColliders, this.onEnemyCollision);
       //.addCollider(colliders.player, this.onPlayerCollision);
   }
 
   enableEnemies(player,enemies) {
-    enemies.addCollider(player, this.onPlayerCollision);
+    enemies.addCollider(player, this.onPlayerCollision, null,'enemies');
     enemies.setVisible();
   }
 
