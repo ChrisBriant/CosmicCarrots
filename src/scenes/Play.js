@@ -20,6 +20,7 @@ class Play extends Phaser.Scene {
   }
 
   create({level}) {
+    console.log('LEVELS', levels);
     this.endOfLevel = null;
     this.level = level;
     this.score = 0;
@@ -32,7 +33,7 @@ class Play extends Phaser.Scene {
 
     const layers = this.createLayers(map);
     const playerZones = this.getPlayerZones(layers.playerZones);
-    const player = this.createPlayer(playerZones.start);
+    const player = this.createPlayer(playerZones.start, map.heightInPixels);
     //const enemies= this.createEnemies(layers.enemySpawns, layers.platformsColliders);
     //const collectables = this.createCollectables(layers.collectables);
     const carrots = this.createCarrots(layers.carrots);
@@ -192,12 +193,13 @@ class Play extends Phaser.Scene {
     EventEmitter.on('GREEN_EVENT', () => { this.enableEnemies(player,enemies) });
     EventEmitter.on('COLLECT_KEY', () => { doCollectKey(this.hud, player)});
     EventEmitter.on('OPEN_CAGE', () => { doOpenCage(player,collectables,this)});
+    EventEmitter.on('RESTART_LEVEL', () => this.scene.restart({level:this.level}));
     //player.body.y = playerZones.start.y-player.body.height -10;
     EventEmitter.on('UNPAUSE',() => { this.scene.resume(); });
   }
  
-  createPlayer(start) {
-    return new Player(this, start.x, start.y);
+  createPlayer(start,mapHeight) {
+    return new Player(this, start.x, start.y, mapHeight);
   }
 
   createPlayerColliders(player,{colliders}) {
@@ -206,8 +208,8 @@ class Play extends Phaser.Scene {
     //ladder.addOverlap(colliders.laddersOverlap, () => console.log('overlap'), this);
     //this.physics.add.overlap(player, colliders.laddersOverlap.objects[1],this.onClimb);
 
-    player.addCollider(colliders.platformsColliders)
-    .addOverlap(colliders.carrots, this.onCollectCarrot, this)
+    player.addCollider(colliders.platformsColliders,null,null,'platforms')
+    player.addOverlap(colliders.carrots, this.onCollectCarrot, this)
     .addOverlap(colliders.collectables, this.onCollect, this);
 
   }

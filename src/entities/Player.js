@@ -11,9 +11,11 @@ import EventEmitter from '../events/Emitter';
 
 
 class Player extends Phaser.Physics.Arcade.Sprite {
-  constructor(scene, x, y) {
+  constructor(scene, x, y,mapHeight) {
     super(scene, x, y, 'player');
     this.hasKey = false;
+    //So we can tell when the player is off the map
+    this.mapHeight = mapHeight;
 
     scene.add.existing(this);
     scene.physics.add.existing(this);
@@ -27,12 +29,14 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   init() {
+    this.colliders = [];
     this.gravity = 500;
     this.playerSpeed = 150;
     this.jumpCount = 0;
     this.consecutiveJumps = 1;
     this.climbing = false;
     this.justClimbed = false;
+    this.playerKilled = false;
     // this.hasBeenHit = false;
     // this.bounceVelocity = 150;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
@@ -60,6 +64,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.body.setGravityY(this.gravity);
     this.setCollideWorldBounds(true);
+    // this.body.onWorldBounds=true;
+    // this.scene.physics.world.on('worldbounds', (body,up,down,left,right) => {
+    //   if(down) {
+    //     console.log('Player is off screen');
+    //   }
+    // });
 
     initAnimations(this.scene.anims);
     this.setScale(1.5);
@@ -74,6 +84,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   }
 
   update() {
+    if(this.playerKilled) {return;}
+    //console.log('playerpos',this.body.y, this.mapHeight);
+    //The player has "died" fallen off the screen so we restart the level
+    if(this.body.y > this.mapHeight) {
+      this.playerKilled = true;
+      EventEmitter.emit('RESTART_LEVEL');
+    }
     if(this.hasBeenHit || !this.body) {return;}
 
   //   if(this.getBounds().top > this.scene.config.height) {
@@ -104,6 +121,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.setVelocityY(-this.playerSpeed*3);
       this.jumpCount++
     }
+
 
   //   if(onFloor) {
   //     this.jumpCount = 0;
@@ -192,8 +210,21 @@ class Player extends Phaser.Physics.Arcade.Sprite {
   //   setTimeout(() => this.setVelocityY(-this.bounceVelocity), 0);
   }
 
+  // addCollider(otherGameObject, callback, context,key) {
+  //   const collider = this.scene.physics.add.collider(this, otherGameObject, callback,null,context || this);
+  //   collider.name = key;
+  //   this.colliders = [...this.colliders, {key:collider}];
+  //   return this;
+  // }
+
   takesHit(source) {
-    console.log('The player has been hit');
+    console.log('The player has been hit',this);
+    this.scene.physics.world.removeCollider(this.colliders['platforms']);
+    const platformCollider = this.scene.physics.world.colliders._active.filter(collider => collider.name === 'platforms')[0];
+    const ladderCollider = this.scene.physics.world.colliders._active.filter(collider => collider.name === 'ladders')[0];
+    console.log('Colliders', this.scene.physics.world.colliders._active, platformCollider);
+    this.scene.physics.world.removeCollider(platformCollider);
+    this.scene.physics.world.removeCollider(ladderCollider);
     // if(this.hasBeenHit) {return;}
 
     // this.health -= source.damage || source.properties.damage || 0;

@@ -8,6 +8,10 @@ class Enemies extends Phaser.GameObjects.Group {
         Object.assign(this, collidable);
     }
 
+    // addCollider(otherGameObject, callback, context) {
+    //     this.scene.physics.add.collider(this, otherGameObject, callback,null,context || this);
+    //     return this;
+    // }
     //Make the enemies visible
     setVisible() {
         console.log('Enabling Enemies',this);

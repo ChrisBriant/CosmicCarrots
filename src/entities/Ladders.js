@@ -3,6 +3,7 @@ import EventEmitter from '../events/Emitter';
 class Ladders  {
     constructor(scene,player,laddersLayer,map) {
         this.ladderOverlap = scene.physics.add.overlap(player, laddersLayer,this.onClimb,null,this);
+        this.ladderOverlap.name = 'ladders';
         this.ladders = laddersLayer;
         this.tileMap = map;
         this.scene = scene;
