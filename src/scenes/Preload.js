@@ -14,6 +14,7 @@ class Preload extends Phaser.Scene {
     this.load.tilemapTiledJSON('level_3', 'assets/carrot_game_map_l3.tmj');
     this.load.tilemapTiledJSON('level_4', 'assets/carrot_game_map_l4.tmj');
     this.load.tilemapTiledJSON('level_5', 'assets/carrot_game_map_l5.tmj');
+    this.load.tilemapTiledJSON('level_6', 'assets/carrot_game_map_l6.tmj');
     //Collectables
     this.load.image('tiles', 'assets/carrot_game_tileset.png');
     // this.load.image('tiles-2', 'assets/main_lev_build_2.png');
@@ -66,7 +67,7 @@ class Preload extends Phaser.Scene {
 
   startGame() {
     //this.scene.start('LevelIntro',{level:3});
-    this.scene.start('PlayScene',{level:5});
+    this.scene.start('PlayScene',{level:6});
   }
 
 }
