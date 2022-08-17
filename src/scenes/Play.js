@@ -9,7 +9,8 @@ import Enemy from '../entities/Enemy';
 import Enemies from '../groups/Enemies';
 import {levels} from '../data/leveldata';
 import EventEmitter from '../events/Emitter';
-import {doPurpleEvent, doCollectKey, doOpenCage} from '../events/events.js'
+import {doPurpleEvent, doCollectKey, doOpenCage} from '../events/events.js';
+import Timer from '../hud/Timer';
 
 
 class Play extends Phaser.Scene {
@@ -26,6 +27,13 @@ class Play extends Phaser.Scene {
     this.endOfLevel = null;
     this.score = 0;
     this.hud = new Hud(this,0,0,this.carrotSequence);
+    //Stage the timer if it is in the level
+    if(levels[`level${this.level}`].timer) {
+      //this.add.text(0,0,"ehllo",{fontFamily: 'Arial', fontSize:'30px', fill: '#000'}).setOrigin(0,0).setDepth(10000);
+      this.timer = new Timer(this,0,0,levels[`level${this.level}`].timer);
+    } else {
+      this.timer = null;
+    }
 
     this.cursors = this.input.keyboard.createCursorKeys();
 
@@ -192,6 +200,7 @@ class Play extends Phaser.Scene {
     //EventEmitter.on('PLAYER_LOOSE', () => { this.scene.restart({gameStatus:'PLAYER_LOOSE'});});
     EventEmitter.on('PURPLE_EVENT', () => { doPurpleEvent(this.endOfLevel) });
     EventEmitter.on('GREEN_EVENT', () => { this.enableEnemies(player,enemies) });
+    EventEmitter.on('BLUE_EVENT', () => {this.timer.startTimer();});
     EventEmitter.on('COLLECT_KEY', () => { doCollectKey(this.hud, player)});
     EventEmitter.on('OPEN_CAGE', () => { doOpenCage(player,collectables,this)});
     EventEmitter.on('RESTART_LEVEL', () => this.scene.restart({level:this.level}));

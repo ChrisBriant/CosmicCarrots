@@ -51,7 +51,7 @@ class Carrots extends Phaser.Physics.Arcade.StaticGroup {
             //const collectable = this.get(collectableO.x, collectableO.y, carrotColor, initEvent).setCustomEvent(customEvent).setLocked(locked);
             console.log('IS THIS LOCKED', propsLocked);
             //DOESN'T WORK
-            const carrot = new Carrot(this.scene,collectableO.x, collectableO.y, carrotColor, initEvent,locked);
+            const carrot = new Carrot(this.scene,collectableO.x, collectableO.y, carrotColor, initEvent,customEvent,locked);
             //scene.physics.add.overlap(this, otherGameObject, callback,null,context || this);
             this.add(carrot);
             //physics.add(carrot);
