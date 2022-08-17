@@ -2,11 +2,12 @@ import Phaser from "phaser";
 import EventEmitter from '../events/Emitter';
 
 class Carrot extends Phaser.Physics.Arcade.Sprite {
-    constructor(scene,x,y,key,initEvent,locked) {
+    constructor(scene,x,y,key,initEvent,customEvent,locked) {
         super(scene,x,y,key);
         this.setOrigin(0,1);
         this.setTexture(`carrot-${key}`);
         this.initEvent = initEvent;
+        this.customEvent = customEvent;
         this.color = key;
         this.locked = locked;
         EventEmitter.on('UNLOCK_CARROT',() => { this.locked = false;});
@@ -67,8 +68,8 @@ class Carrot extends Phaser.Physics.Arcade.Sprite {
     performCustomEvent() {
         console.log(this.customEvent);
         switch (this.customEvent) {
-            case 'TEST_EVENT':
-                console.log('This is a test event');
+            case 'END_TIMER':
+                EventEmitter.emit(this.customEvent);
                 break;
             default:
                 console.log('There is no custom event.');

@@ -11,6 +11,12 @@ class Timer extends Phaser.GameObjects.Container {
         this.setScrollFactor(0);
         this.setDepth(99);
         this.createTimer(scene);
+        this.setAlpha(0);
+        EventEmitter.on('END_TIMER',() => {
+            clearInterval(this.timer);
+            this.timerStarted = false;
+            this.setAlpha(0);
+        });
     }
 
     createTimer(scene) {
@@ -24,6 +30,7 @@ class Timer extends Phaser.GameObjects.Container {
 
     startTimer() {
         if(!this.timerStarted) {
+            this.setAlpha(1);
             const [timerText] = this.getByName('timerDisplay').list;
             console.log('START TIMEOUT');
             this.timer = setInterval(()=>{

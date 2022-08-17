@@ -23,8 +23,14 @@ const levels = {
         title: 'Level 5',
         instruction: 'Collect the blue carrot to start the timer. You have 30 seconds to collect the next carrot and before the level resets!',
         collectSequence : ['blue','green', 'orange','red','yellow', 'pink','purple'],
-        timer : 5
+        timer : 15
+    },
+    level6 : {
+        title: 'Level 6',
+        instruction: 'Collect the blue carrot to start the timer. You have 30 seconds to collect the next carrot and before the level resets!',
+        collectSequence : ['red','green', 'orange','blue','yellow', 'pink','purple'],
     }
 }
+
 
 export {levels};
