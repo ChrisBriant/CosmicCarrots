@@ -200,6 +200,7 @@ class Play extends Phaser.Scene {
     //EventEmitter.on('PLAYER_LOOSE', () => { this.scene.restart({gameStatus:'PLAYER_LOOSE'});});
     EventEmitter.on('PURPLE_EVENT', () => { doPurpleEvent(this.endOfLevel) });
     EventEmitter.on('GREEN_EVENT', () => { this.enableEnemies(player,enemies) });
+    EventEmitter.on('RED_EVENT', () => { player.flying = true; });
     EventEmitter.on('BLUE_EVENT', () => {this.timer.startTimer();});
     EventEmitter.on('COLLECT_KEY', () => { doCollectKey(this.hud, player)});
     EventEmitter.on('OPEN_CAGE', () => { doOpenCage(player,collectables,this)});

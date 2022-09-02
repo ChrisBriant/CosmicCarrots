@@ -33,6 +33,7 @@ class Carrot extends Phaser.Physics.Arcade.Sprite {
         switch (this.color) {
             case 'red':
                 console.log('RED EVENT');
+                EventEmitter.emit('RED_EVENT');
                 break;
             case 'orange':
                 console.log('ORANGE EVENT');

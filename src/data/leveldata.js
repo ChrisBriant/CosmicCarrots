@@ -27,7 +27,7 @@ const levels = {
     },
     level6 : {
         title: 'Level 6',
-        instruction: 'Collect the blue carrot to start the timer. You have 30 seconds to collect the next carrot and before the level resets!',
+        instruction: 'Collect the red carrot to Fly! Press the up arrow repeatedly to fly upwards.',
         collectSequence : ['red','green', 'orange','blue','yellow', 'pink','purple'],
     }
 }

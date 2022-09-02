@@ -37,6 +37,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     this.climbing = false;
     this.justClimbed = false;
     this.playerKilled = false;
+    this.flying = false;
     // this.hasBeenHit = false;
     // this.bounceVelocity = 150;
     this.cursors = this.scene.input.keyboard.createCursorKeys();
@@ -112,6 +113,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
       this.setFlipX(false);
     } else {
       this.setVelocityX(0);
+    }
+
+    //Handle the flying actions
+    if(this.flying) {
+      if(!onFloor) {  this.play('fly', true); } else { this.body.velocity.x !== 0 ? this.play('walk', true) : this.play('idle', true) }
+      this.handleFlying(up);
+      return;
     }
     
     this.handleClimbing(up,down);
@@ -259,6 +267,12 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     setTimeout(()=>{
       this.justClimbed = false;
     }, 200);
+  }
+
+  handleFlying(up) {
+    if(up.isDown) {
+      this.setVelocityY(this.playerSpeed*-1);
+    }
   }
 
   handleClimbing(up,down) {
